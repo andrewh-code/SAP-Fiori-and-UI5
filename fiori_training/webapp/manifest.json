@@ -1,0 +1,118 @@
+{
+	"_version": "1.1.0",
+	"sap.app": {
+		"_version": "1.1.0",
+		"id": "sap.ui5.training",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"resources": "resources.json",
+		"ach": "ach",
+		"sourceTemplate": {
+			"id": "ui5template.basicSAPUI5ApplicationProject",
+			"version": "1.40.12"
+		},
+		"dataSources": {
+	        "invoiceRemote": {
+		        "uri": "/destinations/northwind/V2/Northwind/Northwind.svc/",
+		        "type": "OData",
+		        "settings": {
+		            "odataVersion": "2.0"
+		        }
+	        }
+	    }
+	},
+
+	"sap.ui": {
+		"_version": "1.1.0",
+		"technology": "UI5",
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		},
+		"supportedThemes": [
+			"sap_hcb",
+			"sap_belize"
+
+		]
+	},
+
+	"sap.ui5": {
+		"_version": "1.1.0",
+		"rootView": {
+			"viewName": "sap.ui5.training.view.App",
+			"type": "XML"
+		},
+		"dependencies": {
+			"minUI5Version": "1.30.0",
+			"libs": {
+				"sap.ui.core": {},
+				"sap.m": {},
+				"sap.ui.layout": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "sap.ui5.training.i18n.i18n"
+				}
+			},
+			"invoice": {
+		        "dataSource": "invoiceRemote"
+	        }
+		},
+	    "routing": {
+	        "config": {
+		        "routerClass": "sap.m.routing.Router",
+		        "viewType": "XML",
+		        "viewPath": "sap.ui5.training.view",
+		        "controlId": "app",
+		        "controlAggregation": "pages"
+	        },
+	        "routes": [
+		        {
+		            "pattern": "",
+		            "name": "overview",
+		            "target": "overview"
+		        },
+		        {
+		            "pattern": "detail/{invoicePath}",
+		            "name": "detail",
+		            "target": "detail"
+		        }
+	        ],
+	        "targets": {
+                "overview": {
+		            "viewName": "Overview"
+		        },
+		        "detail": {
+		            "viewName": "Detail"
+		        }
+	        }
+	    },
+		
+		"resources": {
+			"css": [{
+				"uri": "css/style.css"
+			}]
+		}
+	}
+}

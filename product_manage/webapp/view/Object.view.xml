@@ -1,0 +1,98 @@
+<mvc:View
+	controllerName="training.fiori.i849467.product.manage.controller.Object"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:semantic="sap.m.semantic"
+	xmlns:footerbar="sap.ushell.ui.footerbar"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"
+	xmlns:data="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+	xmlns:smartField="sap.ui.comp.smartfield">
+
+	<semantic:FullscreenPage
+		id="page"
+		navButtonPress="onNavBack"
+		showNavButton="true"
+		title="{i18n>objectTitle}"
+		busy="{objectView>/busy}"
+		busyIndicatorDelay="{objectView>/delay}">
+
+		<semantic:content>
+			<ObjectHeader
+				id="objectHeader"
+				title="{Name}"
+				number="{ parts: [{path: 'Price'}, {path: 'CurrencyCode'}], 
+							                         type: 'sap.ui.model.type.Currency', 
+							                formatOptions: {showMeasure: false } }" 
+				numberUnit="{CurrencyCode}" 
+				responsive="true" icon="{ImageUrl}">
+			    <attributes>
+			        <ObjectAttribute text="{MainCategoryName}" title="{/#Product/MainCategory/Name/@sap:label}"/>
+			        <ObjectAttribute text="{SubCategoryName}" title="{/#Product/SubCategoryName/@sap:label}" />
+			    </attributes>
+			</ObjectHeader>
+			<f:SimpleForm id="SimpleFormChange354"
+                		title="{i18n>generalInfo}"
+                		class="sapUiForceWidthAuto sapUiResponsiveMargin"
+                		editable="true"
+                		layout="ResponsiveGridLayout"  
+                		minWidth="1024"
+                		columnsL="1" 
+                		columnsM="1"  
+                		labelSpanL="3" 
+                		labelSpanM="3"
+                		emptySpanL="4" 
+                		emptySpanM="4">
+			    <Label text = "{#Product/Name/@sap:label}>" labelFor="productName" required="true"/>
+			    <Input id="productName" 
+                           value="{path : 'Name',
+					               type : 'sap.ui.model.type.String',
+				                   constraints: {
+						                 minLength: 1,
+						                 search: '^[A-Za-z0-9]+$'
+    						          }
+						          }"
+						          valueStateText="{i18n>productNameErrorDescription}"
+						          maxLength="{path: '/#Product/Name/@maxLength', formatter: 'Number'}"/>
+			    <Label text="{#Product/MainCategory/@sap:label}" labelFor="category" required="true"/>
+                    <Select id="category" selectedKey="{MainCategoryId}" items="{path: '/MainCategories'}" change="updateDescriptionFromSelect" data:description="MainCategoryName">
+                       <core:Item key="{Id}" text="{Name}"/>
+                    </Select>
+                
+                <Label text="{/#Product/Price/@sap:label}" labelFor="price" required="true"/>
+                    <Input id="price" 
+					    value="{parts: [{path: 'Price'}, {path: 'CurrencyCode'}],
+					                     type: 'sap.ui.model.type.Currency',
+					                     formatOptions: {showMeasure: false, parseAsString: true}}"
+						textAlign="Right"/>
+                    <ComboBox id="currency" selectedKey="{CurrencyCode}" items="{path: '/Currencies', length: '300'}">
+                    	<core:Item key="{Code}" text="{Code}"/>
+                    </ComboBox>
+                    <smartField:SmartLabel labelFor="smartPrice"/>
+                    <smartField:SmartField value="{Price}" id="smartPrice" />
+            </f:SimpleForm>
+ 		</semantic:content>
+ 		
+		<semantic:sendEmailAction>
+			<semantic:SendEmailAction id="shareEmail" press="onShareEmailPress"/>
+		</semantic:sendEmailAction>
+
+		<semantic:shareInJamAction>
+			<semantic:ShareInJamAction id="shareInJam" visible="{FLP>/isShareInJamActive}" press="onShareInJamPress"/>
+		</semantic:shareInJamAction>
+
+		<semantic:saveAsTileAction>
+			<footerbar:AddBookmarkButton id ="shareTile" title="{objectView>/saveAsTileTitle}" />
+		</semantic:saveAsTileAction>
+        <semantic:messagesIndicator>
+			<semantic:MessagesIndicator press="onMessagesButtonPress"/>
+		</semantic:messagesIndicator>
+		<semantic:cancelAction>
+            <semantic:CancelAction id="cancelButton" enabled ="true" press="onCancelPressed"/>
+        </semantic:cancelAction>
+         <semantic:saveAction>
+            <semantic:SaveAction id="saveButton" enabled ="{objectView>/isSaveAllowed}" press="onSavePressed"/>
+        </semantic:saveAction>
+	</semantic:FullscreenPage>
+
+</mvc:View>
